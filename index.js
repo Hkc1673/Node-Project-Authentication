@@ -7,9 +7,11 @@ require('dotenv').config()
 const authRoute = require("./routes/AuthRouter");
 
 //Connect DB
-mongoose.connect(process.env.MONGODB_URI, 
-    {useNewUrlParser: true,
-    useUnifiedTopology: true},
+mongoose.connect(process.env.MONGODB_URI,
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    },
     () => console.log("connected DB")
 );
 //Middleware
