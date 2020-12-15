@@ -1,6 +1,7 @@
 const User = require("../models/UserModel");
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
+var jwt = require("jsonwebtoken");
 
 exports.authRegister = async (req, res) => {
     const { name, email, password } = req.body;
@@ -28,7 +29,7 @@ exports.authRegister = async (req, res) => {
     const user = new User({
         name,
         email,
-        password: hashPassword
+        password: hashPassword,
     });
     await user.save();
 
@@ -60,4 +61,18 @@ exports.authLogin = async (req, res) => {
             .status(400)
             .json({ errors: [{ message: "Invalid credentials" }] });
     }
+
+     // JSON WEB TOKEN - JWT
+  jwt.sign(
+    { userData },
+    process.env.JWT_SECRET_KEY,
+    { expiresIn: 3600 },
+    (err, token) => {
+      if (err) {
+        return res.status(400).json({ errors: [{ message: "Unknown Error" }] });
+      }
+      res.status(202).json({ token });
+    }
+  );
+    res.send("logged in!");
 };
