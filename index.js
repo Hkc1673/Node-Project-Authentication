@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
+const errorHandling = require("./middleware/errrorHandlings")
 require('dotenv').config()
 
 //import Routes
@@ -22,8 +23,9 @@ app.use(express.json());
 //Route Middleware
 
 app.use("/api/user", authRoute);
-app.use("/api/posts", postRoute);
+app.use("/api", postRoute);
 
+app.use(errorHandling)
 
 app.listen(3000, () => {
     console.log("I'm listening on port")

@@ -9,14 +9,14 @@ exports.authRegister = async (req, res) => {
     // Field Validation
     const validationErr = validationResult(req);
     if (validationErr.errors.length > 0) {
-        return res.status(400).json({ errors: validationErr.array() });
+        return res.status(201).json({ errors: validationErr.array() });
     }
 
     // User exist check
     const userData = await User.findOne({ email });
     if (userData) {
         return res
-            .status(400)
+            .status(201)
             .json({ errors: [{ message: "User already exists!!" }] });
     }
 
@@ -34,7 +34,7 @@ exports.authRegister = async (req, res) => {
     await user.save();
 
     //TODO: Error handling for saving
-    res.send("Register Completed.");
+    res.send({success: true, message: "registered completed"});
 };
 
 exports.authLogin = async (req, res) => {
@@ -43,14 +43,14 @@ exports.authLogin = async (req, res) => {
     // Field Validation
     const validationErr = validationResult(req);
     if (validationErr.errors.length > 0) {
-        return res.status(400).json({ errors: validationErr.array() });
+        return res.status(200).json({ errors: validationErr.array() });
     }
 
     // User exist check
     const userData = await User.findOne({ email });
     if (!userData) {
         return res
-            .status(400)
+            .status(201)
             .json({ errors: [{ message: "User doesn't exists!!" }] });
     }
 
@@ -58,21 +58,28 @@ exports.authLogin = async (req, res) => {
     const isPasswordMatch = await bcrypt.compare(password, userData.password);
     if (!isPasswordMatch) {
         return res
-            .status(400)
+            .status(201)
             .json({ errors: [{ message: "Invalid credentials" }] });
     }
 
-     // JSON WEB TOKEN - JWT
-  jwt.sign(
-    { userData },
-    process.env.JWT_SECRET_KEY,
-    { expiresIn: 3600 },
-    (err, token) => {
-      if (err) {
-        return res.status(400).json({ errors: [{ message: "Unknown Error" }] });
-      }
-      res.status(202).json({ token });
-    }
-  );
-    res.send("logged in!");
+    // JSON WEB TOKEN - JWT
+    jwt.sign(
+        { userData },
+        process.env.JWT_SECRET_KEY,
+        { expiresIn: 3600 },
+        (err, token) => {
+            if (err) {
+                return res.status(400).json({ errors: [{ message: "Unknown Error" }] });
+            }
+            //   res.status(202).json({ token });
+            res.send({
+                token,
+                userName: userData.name,
+                userId: userData._id,
+                success: true
+            })
+        }
+    );
+    // res.send("logged in!");
+    // res.status(202).json({ token });
 };
