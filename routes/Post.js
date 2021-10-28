@@ -13,7 +13,7 @@ router.get("/", verify,(req, res) => {
 });
 
 router.post("/list", verify, ListController.createPost);
-router.post("/update/id", verify, ListController.createDate)
+router.post("/update/:id", verify, ListController.createDate)
 router.get("/list/:id", verify, ListController.getList);
 router.get("/singleList/:id", verify, ListController.getSingleList)
 router.patch("/singleList/:id", verify, ListController.updateList);

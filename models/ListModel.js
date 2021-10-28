@@ -5,31 +5,37 @@ const todoListSchema = mongoose.Schema({
     title: String,
     describe: String,
     pomodoro: String,
+    category: {
+        type: String,
+        default: "Common"
+    },
     completed: {
         type: Boolean,
         default: false,
     },
-    markedDates: {
-        date: String,
-        marked: {
-            type: Boolean,
+    markedDates: [
+        {
+            date: String,
+            marked: {
+                type: Boolean,
+            },
+            dotColor: {
+                type: String,
+            },
+            startingDay: {
+                type: Boolean,
+            },
+            textColor: {
+                type: String,
+            },
+            color: {
+                type: String,
+            },
+            endingDay: {
+                type: Boolean,
+            },
         },
-        dotColor: {
-            type: String,
-        },
-        startingDay: {
-            type: Boolean,
-        },
-        textColor: {
-            type: String,
-        },
-        color: {
-            type: String,
-        },
-        endingDay: {
-            type: Boolean,
-        },
-    },
+    ],
     createdAt: {
         type: Date,
         default: new Date()
