@@ -5,7 +5,7 @@ exports.createPost = async (req, res) => {
   const newList = new List(list);
   try {
     await newList.save();
-    res.status(201).json(newList);
+    res.status(201).json({success:true});
   } catch (error) {
     res.status(409).json({
       message: error.message,
